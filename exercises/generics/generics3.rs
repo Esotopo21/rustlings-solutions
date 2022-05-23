@@ -26,7 +26,6 @@ impl ReportCardChange for f32{
 }
 
 impl <T: ReportCardChange + std::fmt::Display> ReportCard <T> {
-    T = ReportCardChange + std_:
     pub fn print(&self) -> String {
         format!("{} ({}) - achieved a grade of {}",
             &self.student_name, &self.student_age, &self.grade)
