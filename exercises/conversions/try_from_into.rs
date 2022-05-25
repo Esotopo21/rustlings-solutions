@@ -31,11 +31,11 @@ enum IntoColorError {
 // Also note that correct RGB color values must be integers in the 0..=255 range.
 
 fn in_color_range(n: i16) -> bool{
-    n >= 0 && n <= 255
+    n > 0 && n < 255
 }
 
 fn in_color_range_b(n: &i16) -> bool{
-    *n >= 0 && *n <= 255
+    *n > 0 && *n < 255
 }
 
 // Tuple implementation
@@ -72,18 +72,18 @@ impl TryFrom<[i16; 3]> for Color {
 impl TryFrom<&[i16]> for Color {
     type Error = IntoColorError;
     fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
-        let mut s_vec: Vec<i16> = slice.to_vec();
+        let s_vec: Vec<i16> = slice.to_vec();
         if s_vec.len() != 3 {
             return Err(IntoColorError::BadLen);
         }
-        s_vec = s_vec.iter().filter(|x| in_color_range_b(*x)).collect();
-        return if s_vec.len() != 3 {
+        let s_vec_2: Vec<&i16> = s_vec.iter().filter(|x| in_color_range_b(*x)).collect();
+        return if s_vec_2.len() != 3 {
             return Err(IntoColorError::IntConversion)
         }else{
-            let r = *s_vec.get(0).unwrap();
-            let g = *s_vec.get(1).unwrap();
-            let b = *s_vec.get(2).unwrap();
-            return Ok(Color{red: r as u8, green: g as u8, blue: b as u8});
+            let r = *s_vec_2.get(0).unwrap();
+            let g = *s_vec_2.get(1).unwrap();
+            let b = *s_vec_2.get(2).unwrap();
+            return Ok(Color{red: *r as u8, green: *g as u8, blue: *b as u8});
         }
     }
 }
